@@ -1,6 +1,3 @@
-// This is the boilerplate code given for you
-// You can modify this code
-// Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
   { id: 2, name: "Product 2", price: 20 },
@@ -9,10 +6,10 @@ const products = [
   { id: 5, name: "Product 5", price: 50 },
 ];
 
-// DOM elements
 const productList = document.getElementById("product-list");
+const cartList = document.getElementById("cart-list");
+const clearCartBtn = document.getElementById("clear-cart-btn");
 
-// Render product list
 function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement("li");
@@ -21,18 +18,44 @@ function renderProducts() {
   });
 }
 
-// Render cart list
-function renderCart() {}
+function renderCart() {
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cartList.innerHTML = "";
+  cart.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = `${item.name} - $${item.price}`;
+    cartList.appendChild(li);
+  });
+}
 
-// Add item to cart
-function addToCart(productId) {}
+function addToCart(productId) {
+  const product = products.find((p) => p.id === productId);
+  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cart.push(product);
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
 
-// Remove item from cart
-function removeFromCart(productId) {}
+function removeFromCart(productId) {
+  let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cart = cart.filter((item) => item.id !== productId);
+  sessionStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
 
-// Clear cart
-function clearCart() {}
+function clearCart() {
+  sessionStorage.removeItem("cart");
+  renderCart();
+}
 
-// Initial render
+productList.addEventListener("click", (e) => {
+  if (e.target && e.target.classList.contains("add-to-cart-btn")) {
+    const productId = parseInt(e.target.getAttribute("data-id"));
+    addToCart(productId);
+  }
+});
+
+clearCartBtn.addEventListener("click", clearCart);
+
 renderProducts();
 renderCart();
