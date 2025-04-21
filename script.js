@@ -30,11 +30,16 @@ function renderCart() {
 
 function addToCart(productId) {
   const product = products.find((p) => p.id === productId);
+  
   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
   cart.push(product);
+  
   sessionStorage.setItem("cart", JSON.stringify(cart));
+
   renderCart();
 }
+
 
 function removeFromCart(productId) {
   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
