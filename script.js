@@ -31,10 +31,7 @@ function renderCart() {
 function addToCart(productId) {
   const product = products.find((p) => p.id === productId);
   let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-  const existingProductIndex = cart.findIndex(item => item.id === productId);
-  if (existingProductIndex === -1) {
-    cart.push(product);
-  }
+  cart.push(product);
   sessionStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
